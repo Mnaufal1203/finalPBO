@@ -4,6 +4,15 @@
  */
 package GUI;
 
+import entities.Pegawai;
+import entities.Absensi;
+import helpers.TabelPegawai;
+import helpers.TabelAbsensi;
+import java.util.List;
+import models.PegawaiDAO;
+import models.PegawaiSQLite;
+import models.AbsensiDAO;
+import models.AbsensiSQLite;
 /**
  *
  * @author WINDOWS 10
@@ -13,10 +22,45 @@ public class PanelAbsensi extends javax.swing.JPanel {
     /**
      * Creates new form PanelAbsensi
      */
+    AbsensiDAO dao;
+    PegawaiDAO daoPegawai;
+    List<Absensi> dataAbsensi;
+    List<Pegawai> dataPegawai;
+    boolean editMode = false;
+   
     public PanelAbsensi() {
         initComponents();
+        dao = new AbsensiSQLite();
+        daoPegawai = new PegawaiSQLite();
+        refresh();
+    }
+    
+    private void clear() {
+        txtIDAbsensi.setText("");
+        txtIDPegawai.setText("");
+        txtTanggal.setText("");
+        btnHapus.setEnabled(false);
     }
 
+    public void refresh() {
+    dataPegawai = daoPegawai.selectAll();
+    tblPegawai.setModel(new TabelPegawai(dataPegawai));
+    dataAbsensi = dao.selectAll();
+    tblAbsensi.setModel(new TabelAbsensi(dataAbsensi));
+    
+    txtIDAbsensi.setEnabled(true);
+    clear();
+    }
+
+    private Pegawai getPegawaiByID(String id) {
+        for (Pegawai pegawai : dataPegawai) {
+            if (pegawai.idpegawai.equals(id)) {
+                return pegawai;
+            }
+        }
+        return null;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,17 +75,15 @@ public class PanelAbsensi extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAbsensi = new javax.swing.JTable();
         btnSimpan = new javax.swing.JButton();
-        btnRefresh1 = new javax.swing.JButton();
-        btnHapus1 = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         txtTanggal = new javax.swing.JTextField();
-        txtNama = new javax.swing.JTextField();
         txtIDPegawai = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtIDAbsen = new javax.swing.JTextField();
+        txtIDAbsensi = new javax.swing.JTextField();
         boxAlasan = new javax.swing.JComboBox<>();
         btnReset = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -73,6 +115,11 @@ public class PanelAbsensi extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblAbsensi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblAbsensiMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblAbsensi);
 
         btnSimpan.setBackground(new java.awt.Color(51, 255, 102));
@@ -83,18 +130,18 @@ public class PanelAbsensi extends javax.swing.JPanel {
             }
         });
 
-        btnRefresh1.setText("Refresh");
-        btnRefresh1.addActionListener(new java.awt.event.ActionListener() {
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefresh1ActionPerformed(evt);
+                btnRefreshActionPerformed(evt);
             }
         });
 
-        btnHapus1.setBackground(new java.awt.Color(255, 51, 51));
-        btnHapus1.setText("Hapus");
-        btnHapus1.addActionListener(new java.awt.event.ActionListener() {
+        btnHapus.setBackground(new java.awt.Color(255, 51, 51));
+        btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHapus1ActionPerformed(evt);
+                btnHapusActionPerformed(evt);
             }
         });
 
@@ -104,17 +151,9 @@ public class PanelAbsensi extends javax.swing.JPanel {
 
         jLabel3.setText("ID Pegawai");
 
-        jLabel4.setText("Nama");
-
         txtTanggal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTanggalActionPerformed(evt);
-            }
-        });
-
-        txtNama.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNamaActionPerformed(evt);
             }
         });
 
@@ -135,6 +174,11 @@ public class PanelAbsensi extends javax.swing.JPanel {
 
         btnReset.setBackground(new java.awt.Color(255, 51, 51));
         btnReset.setText("RESET");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         tblPegawai.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -147,6 +191,11 @@ public class PanelAbsensi extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblPegawai.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPegawaiMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tblPegawai);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -167,20 +216,15 @@ public class PanelAbsensi extends javax.swing.JPanel {
                     .addComponent(jLabel3))
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtIDPegawai)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNama))
-                    .addComponent(txtIDAbsen)
-                    .addComponent(txtTanggal)))
+                    .addComponent(txtIDAbsensi)
+                    .addComponent(txtTanggal)
+                    .addComponent(txtIDPegawai)))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(btnSimpan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
-                .addComponent(btnRefresh1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
-                .addComponent(btnHapus1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,7 +232,7 @@ public class PanelAbsensi extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtIDAbsen))
+                    .addComponent(txtIDAbsensi))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -196,9 +240,7 @@ public class PanelAbsensi extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(txtIDPegawai)
-                    .addComponent(txtNama))
+                    .addComponent(txtIDPegawai))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -210,32 +252,50 @@ public class PanelAbsensi extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSimpan)
-                    .addComponent(btnRefresh1)
-                    .addComponent(btnHapus1))
+                    .addComponent(btnRefresh)
+                    .addComponent(btnHapus))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
-        // TODO add your handling code here:
+        txtIDAbsensi.setEnabled(true);
+        String idpegawai = txtIDPegawai.getText();
+        String idabsensi = txtIDAbsensi.getText();
+        Pegawai pegawaiID = getPegawaiByID(idpegawai);
+        String tanggal = txtTanggal.getText();
+        String alasan = boxAlasan.getSelectedItem().toString();
+        
+        Absensi newabsensi = new Absensi(idabsensi, tanggal,alasan);
+        newabsensi.alasan=alasan;
+        newabsensi.idpegawai= pegawaiID;
+        if (editMode == false) {
+            dao.insert(newabsensi);
+        } else {
+            dao.update(newabsensi);
+        }
+        refresh();
+        clear();//
     }//GEN-LAST:event_btnSimpanActionPerformed
 
-    private void btnRefresh1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefresh1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRefresh1ActionPerformed
 
-    private void btnHapus1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapus1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnHapus1ActionPerformed
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        refresh();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        txtIDAbsensi.setEnabled(true);
+
+        dao.delete(txtIDAbsensi.getText());
+        refresh();
+
+    }//GEN-LAST:event_btnHapusActionPerformed
 
     private void txtTanggalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTanggalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTanggalActionPerformed
-
-    private void txtNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNamaActionPerformed
 
     private void txtIDPegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDPegawaiActionPerformed
         // TODO add your handling code here:
@@ -245,17 +305,48 @@ public class PanelAbsensi extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_boxAlasanActionPerformed
 
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        txtIDAbsensi.setEnabled(true);
+
+        dao.reset();
+        refresh();
+    }//GEN-LAST:event_btnResetActionPerformed
+
+    private void tblPegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPegawaiMouseClicked
+            txtIDAbsensi.setEnabled(true);
+
+            Pegawai pegawai = dataPegawai.get(tblPegawai.getSelectedRow());
+
+            txtIDPegawai.setText(pegawai.idpegawai);
+            txtIDPegawai.setEnabled(false);
+
+    }//GEN-LAST:event_tblPegawaiMouseClicked
+
+    private void tblAbsensiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAbsensiMouseClicked
+            editMode = true;
+            btnHapus.setEnabled(true);
+
+            Absensi absensi = dataAbsensi.get(tblAbsensi.getSelectedRow());
+
+            txtIDPegawai.setText(absensi.idpegawai.idpegawai);
+            txtIDAbsensi.setText(absensi.idabsensi);
+            txtTanggal.setText(absensi.tanggal);
+
+            txtIDAbsensi.setEnabled(false);
+            txtIDPegawai.setEnabled(false);
+            txtTanggal.setEnabled(false);
+    }//GEN-LAST:event_tblAbsensiMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> boxAlasan;
-    private javax.swing.JButton btnHapus1;
-    private javax.swing.JButton btnRefresh1;
+    private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -263,9 +354,8 @@ public class PanelAbsensi extends javax.swing.JPanel {
     private javax.swing.JTable jTable2;
     private javax.swing.JTable tblAbsensi;
     private javax.swing.JTable tblPegawai;
-    private javax.swing.JTextField txtIDAbsen;
+    private javax.swing.JTextField txtIDAbsensi;
     private javax.swing.JTextField txtIDPegawai;
-    private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtTanggal;
     // End of variables declaration//GEN-END:variables
 }

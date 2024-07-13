@@ -13,7 +13,7 @@ import javax.swing.table.AbstractTableModel;
  */
     public class TabelAbsensi extends AbstractTableModel{
     List<Absensi> dataAbsensi;
-    String header[] = {"ID Absensi", "Tagggal", "ID Pegawai", "Nama", "Alasan"};
+    String header[] = {"ID Absensi", "Tagggal", "ID Pegawai", "Alasan"};
 
     public TabelAbsensi(List<Absensi> dataAbsensi) {
         this.dataAbsensi = dataAbsensi;
@@ -37,18 +37,12 @@ import javax.swing.table.AbstractTableModel;
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-                switch (columnIndex) {
-            case 0:
-                return dataAbsensi.get(rowIndex).idabsensi;
-            case 1:
-                return dataAbsensi.get(rowIndex).tanggal;
-            case 2:
-                return dataAbsensi.get(rowIndex).idpegawai;
-            case 3:
-                return dataAbsensi.get(rowIndex).nama;
-            default:
-                return dataAbsensi.get(rowIndex).alasan;
-        }
+        return switch (columnIndex) {
+            case 0 -> dataAbsensi.get(rowIndex).idabsensi;
+            case 1 -> dataAbsensi.get(rowIndex).tanggal;
+            case 2 -> dataAbsensi.get(rowIndex).idpegawai.idpegawai;
+            default -> dataAbsensi.get(rowIndex).alasan;
+        };
     }
 }
 

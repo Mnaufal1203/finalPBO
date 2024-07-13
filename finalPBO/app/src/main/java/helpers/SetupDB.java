@@ -26,8 +26,7 @@ public class SetupDB {
             idpegawai TEXT,
             nama TEXT,
             alasan TEXT NOT NULL,
-            FOREIGN KEY (idpegawai) REFERENCES pegawai(idpegawai),
-            FOREIGN KEY (nama) REFERENCES pegawai(nama)
+            FOREIGN KEY (idpegawai) REFERENCES pegawai(idpegawai)
             );""",
             """
             CREATE TABLE IF NOT EXISTS kehadiran (
@@ -40,8 +39,7 @@ public class SetupDB {
             jamkeluar INTEGER DEFAULT 0,
             menitkeluar INTEGER DEFAULT 0,
             durasi INTEGER DEFAULT 0,
-            FOREIGN KEY (idpegawai) REFERENCES pegawai(idpegawai),
-            FOREIGN KEY (nama) REFERENCES pegawai(nama)
+            FOREIGN KEY (idpegawai) REFERENCES pegawai(idpegawai)
             );""",};
 
         try (Connection conn = KoneksiDB.connect(); Statement stmt = conn.createStatement()) {

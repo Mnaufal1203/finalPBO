@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface AbsensiDAO {
     void insert(Absensi absensi);
-    
+    void reset();
     List<Absensi> selectAll();
     void update(Absensi absensi);
     void delete(String absensi);

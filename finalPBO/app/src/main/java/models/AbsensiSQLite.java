@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package models;
+
 import entities.Pegawai;
 import entities.Absensi;
 import helpers.KoneksiDB;
@@ -17,53 +18,49 @@ import java.util.List;
  *
  * @author WINDOWS 10
  */
-public class AbsensiSQLite implements AbsensiDAO{
+public class AbsensiSQLite implements AbsensiDAO {
 
     @Override
     public void insert(Absensi absensi) {
-        String sql = "INSERT INTO absensi(idabsensi,tanggal, idpegawai,nama, alasan) VALUES(?, ?, ?,?, ?)";
+        String sql = "INSERT INTO absensi(idabsensi, tanggal, idpegawai, alasan) VALUES(?, ?, ?, ?)";
 
         try (Connection conn = KoneksiDB.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, absensi.idabsensi);
             pstmt.setString(2, absensi.tanggal);
             pstmt.setString(3, absensi.idpegawai.idpegawai);
-            pstmt.setString(4, absensi.nama.nama);
-            pstmt.setString(5, absensi.alasan);
+            pstmt.setString(4, absensi.alasan);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }    }
+        }
+    }
 
     @Override
-     public List<Absensi> selectAll() {
+    public List<Absensi> selectAll() {
         String sql = """
-            SELECT idabsensi, tanggal ,p.idpegawai as idemployee p.nama as name, alasan
-                            FROM absensi a,pegawai p
-                            where a.idpegawai = p.idpegawai""";
-        List<Absensi> datatkt = new ArrayList<>();
-
+            SELECT idabsensi, tanggal, p.idpegawai AS idgawe, alasan
+            FROM absensi a, pegawai p
+            WHERE a.idpegawai = p.idpegawai""";
+        List<Absensi> dataabs = new ArrayList<>();
         try (Connection conn = KoneksiDB.connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-
             while (rs.next()) {
                 Absensi absensi = new Absensi(
                         rs.getString("idabsensi"),
                         rs.getString("tanggal"),
                         rs.getString("alasan")
                 );
-                String idpegawai = rs.getString("idemployee");
-                String nama = rs.getString("name");
-            if (idpegawai != null) {
-                    absensi.idpegawai = new Pegawai(idpegawai, nama);
+                String idpegawai = rs.getString("idgawe");
+                if (idpegawai != null) {
+                    absensi.idpegawai = new Pegawai(idpegawai);
                 }
-                datatkt.add(absensi);
+                dataabs.add(absensi);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        return datatkt;
+        return dataabs;
     }
-
 
     @Override
     public void delete(String idabsensi) {
@@ -80,9 +77,9 @@ public class AbsensiSQLite implements AbsensiDAO{
     @Override
     public Absensi selectbyIDAbsensi(String idabsensi) {
         String sql = """
-            SELECT idabsensi, a.idpegawai, jumlah
-                FROM absensi t,pegawai p
-                where t.idpegawai = p.idpegawai and idabsensi= ?""";
+            SELECT idabsensi, a.idpegawai AS idgawe, tanggal, alasan
+            FROM absensi a, pegawai p
+            WHERE a.idpegawai = p.idpegawai AND idabsensi = ?""";
 
         Absensi absensi = null;
 
@@ -96,7 +93,7 @@ public class AbsensiSQLite implements AbsensiDAO{
                         rs.getString("tanggal"),
                         rs.getString("alasan")
                 );
-                String idpegawai = rs.getString("idpegawai");
+                String idpegawai = rs.getString("idgawe");
                 if (idpegawai != null) {
                     absensi.idpegawai = new Pegawai(idpegawai);
                 }
@@ -108,8 +105,9 @@ public class AbsensiSQLite implements AbsensiDAO{
         return absensi;
     }
 
+    @Override
     public void update(Absensi absensi) {
-        String sql = "UPDATE tiket SET alasan = ? where idabsensi = ?  ";
+        String sql = "UPDATE absensi SET alasan = ? WHERE idabsensi = ?";
 
         try (Connection conn = KoneksiDB.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, absensi.alasan);
@@ -120,4 +118,14 @@ public class AbsensiSQLite implements AbsensiDAO{
         }
     }
 
+    @Override
+    public void reset() {
+        String sql = "DELETE FROM absensi";
+
+        try (Connection conn = KoneksiDB.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

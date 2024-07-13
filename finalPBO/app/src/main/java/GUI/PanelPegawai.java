@@ -250,6 +250,7 @@ public class PanelPegawai extends javax.swing.JPanel {
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void tblPegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPegawaiMouseClicked
+             if (evt.getClickCount() == 2) {
             editMode = true;
             btnHapus.setEnabled(true);
 
@@ -260,7 +261,7 @@ public class PanelPegawai extends javax.swing.JPanel {
             txtDept.setText(pegawai.dept);
             txtID.setEnabled(false);
     }//GEN-LAST:event_tblPegawaiMouseClicked
-
+    }
           
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCariID;

@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package models;
+import entities.Pegawai;
 
+import java.util.List;
 /**
  *
  * @author WINDOWS 10

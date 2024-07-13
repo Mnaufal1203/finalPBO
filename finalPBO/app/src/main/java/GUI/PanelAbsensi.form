@@ -60,23 +60,17 @@
               </Group>
               <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="txtIDPegawai" max="32767" attributes="0"/>
-                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtNama" max="32767" attributes="0"/>
-                  </Group>
-                  <Component id="txtIDAbsen" max="32767" attributes="0"/>
+                  <Component id="txtIDAbsensi" max="32767" attributes="0"/>
                   <Component id="txtTanggal" max="32767" attributes="0"/>
+                  <Component id="txtIDPegawai" alignment="0" max="32767" attributes="0"/>
               </Group>
           </Group>
           <Group type="102" attributes="0">
               <Component id="btnSimpan" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="100" max="32767" attributes="0"/>
-              <Component id="btnRefresh1" min="-2" pref="76" max="-2" attributes="0"/>
+              <Component id="btnRefresh" min="-2" pref="76" max="-2" attributes="0"/>
               <EmptySpace pref="98" max="32767" attributes="0"/>
-              <Component id="btnHapus1" min="-2" pref="74" max="-2" attributes="0"/>
+              <Component id="btnHapus" min="-2" pref="74" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -86,7 +80,7 @@
               <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtIDAbsen" alignment="3" max="32767" attributes="0"/>
+                  <Component id="txtIDAbsensi" alignment="3" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -96,9 +90,7 @@
               <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtIDPegawai" alignment="3" max="32767" attributes="0"/>
-                  <Component id="txtNama" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Component id="jScrollPane3" pref="134" max="32767" attributes="0"/>
@@ -112,8 +104,8 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnSimpan" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnRefresh1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnHapus1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnRefresh" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnHapus" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="133" max="32767" attributes="0"/>
@@ -140,6 +132,9 @@
               </Table>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblAbsensiMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -154,15 +149,15 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSimpanActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnRefresh1">
+    <Component class="javax.swing.JButton" name="btnRefresh">
       <Properties>
         <Property name="text" type="java.lang.String" value="Refresh"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRefresh1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRefreshActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnHapus1">
+    <Component class="javax.swing.JButton" name="btnHapus">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="33" green="33" red="ff" type="rgb"/>
@@ -170,7 +165,7 @@
         <Property name="text" type="java.lang.String" value="Hapus"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHapus1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHapusActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
@@ -188,19 +183,9 @@
         <Property name="text" type="java.lang.String" value="ID Pegawai"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel4">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Nama"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JTextField" name="txtTanggal">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTanggalActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtNama">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNamaActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtIDPegawai">
@@ -213,7 +198,7 @@
         <Property name="text" type="java.lang.String" value="Alasan"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtIDAbsen">
+    <Component class="javax.swing.JTextField" name="txtIDAbsensi">
     </Component>
     <Component class="javax.swing.JComboBox" name="boxAlasan">
       <Properties>
@@ -240,6 +225,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="RESET"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnResetActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane3">
       <AuxValues>
@@ -259,6 +247,9 @@
               </Table>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblPegawaiMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

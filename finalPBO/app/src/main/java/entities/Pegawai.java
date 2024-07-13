@@ -29,8 +29,6 @@ public class Pegawai {
     }
 
 
-    
-    
     public String getIdpegawai() {
         return idpegawai;
     }
@@ -43,5 +41,16 @@ public class Pegawai {
         return dept;
     }
     
-    
+@Override
+public String toString() {
+    return idpegawai;
+}
+
+public String toNama() {
+    return nama;
+}
+
+public String toDept() {
+    return dept;
+}
 }
