@@ -289,7 +289,7 @@ public class PanelAbsensi extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-        txtIDAbsensi.setEnabled(true);
+
 
         dao.delete(txtIDAbsensi.getText());
         refresh();
@@ -309,7 +309,7 @@ public class PanelAbsensi extends javax.swing.JPanel {
     }//GEN-LAST:event_boxAlasanActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        txtIDAbsensi.setEnabled(true);
+
 
         dao.reset();
         refresh();
@@ -317,9 +317,7 @@ public class PanelAbsensi extends javax.swing.JPanel {
 
     private void tblPegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPegawaiMouseClicked
             txtIDAbsensi.setEnabled(true);
-
             Pegawai pegawai = dataPegawai.get(tblPegawai.getSelectedRow());
-
             txtIDPegawai.setText(pegawai.idpegawai);
             txtIDPegawai.setEnabled(false);
 

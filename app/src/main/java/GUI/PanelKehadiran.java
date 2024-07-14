@@ -352,14 +352,13 @@ public class PanelKehadiran extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRefresh1ActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-        txtIDKehadiran.setEnabled(true);
 
         dao.delete(txtIDKehadiran.getText());
         refresh();
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void btnHapus1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapus1ActionPerformed
-        txtIDKehadiran.setEnabled(true);
+
         dao.delete(txtIDKehadiran.getText());
         refresh();
     }//GEN-LAST:event_btnHapus1ActionPerformed
@@ -369,7 +368,7 @@ public class PanelKehadiran extends javax.swing.JPanel {
     }//GEN-LAST:event_txtIDKehadiranActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        txtIDKehadiran.setEnabled(true);
+
         dao.reset();
         refresh();
     }//GEN-LAST:event_btnResetActionPerformed

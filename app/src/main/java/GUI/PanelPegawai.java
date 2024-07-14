@@ -246,7 +246,7 @@ public class PanelPegawai extends javax.swing.JPanel {
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
 
-        txtID.setEnabled(true);
+
         refresh();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
