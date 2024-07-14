@@ -33,7 +33,7 @@ public class MainPage extends javax.swing.JFrame {
         mainPanel.add("kehadiran", panelKehadiran);
         mainPanel.add("absensi", panelAbsensi);
 
-        layout.show(mainPanel, "perjalanan");
+        layout.show(mainPanel, "pegawai");
     }
 
     /**
@@ -104,17 +104,17 @@ public class MainPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAbsensiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbsensiActionPerformed
-
+        panelAbsensi.refresh();
         layout.show(mainPanel, "absensi");
     }//GEN-LAST:event_btnAbsensiActionPerformed
 
     private void btnPegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPegawaiActionPerformed
-
+        panelPegawai.refresh();
         layout.show(mainPanel, "pegawai");
     }//GEN-LAST:event_btnPegawaiActionPerformed
 
     private void btnKehadiranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKehadiranActionPerformed
-
+        panelKehadiran.refresh();
         layout.show(mainPanel, "kehadiran");
     }//GEN-LAST:event_btnKehadiranActionPerformed
 

@@ -24,7 +24,6 @@ public class SetupDB {
             idabsensi TEXT PRIMARY KEY,
             tanggal TEXT NOT NULL,
             idpegawai TEXT,
-            nama TEXT,
             alasan TEXT NOT NULL,
             FOREIGN KEY (idpegawai) REFERENCES pegawai(idpegawai)
             );""",
@@ -33,7 +32,6 @@ public class SetupDB {
             idkehadiran TEXT PRIMARY KEY,
             tanggal TEXT NOT NULL,
             idpegawai TEXT,
-            nama TEXT,
             jammasuk INTEGER DEFAULT 0,
             menitmasuk INTEGER DEFAULT 0,
             jamkeluar INTEGER DEFAULT 0,

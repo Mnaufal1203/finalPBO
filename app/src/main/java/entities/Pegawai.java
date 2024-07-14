@@ -45,12 +45,4 @@ public class Pegawai {
 public String toString() {
     return idpegawai;
 }
-
-public String toNama() {
-    return nama;
-}
-
-public String toDept() {
-    return dept;
-}
 }
