@@ -3,20 +3,63 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package GUI;
-
+import entities.Pegawai;
+import entities.Kehadiran;
+import helpers.TabelPegawai;
+import helpers.TabelKehadiran;
+import java.util.List;
+import models.PegawaiDAO;
+import models.PegawaiSQLite;
+import models.KehadiranDAO;
+import models.KehadiranSQLite;
 /**
  *
  * @author WINDOWS 10
  */
 public class PanelKehadiran extends javax.swing.JPanel {
-
+    KehadiranDAO dao;
+    PegawaiDAO daoPegawai;
+    List<Kehadiran> dataKehadiran;
+    List<Pegawai> dataPegawai;
+    boolean editMode = false;
     /**
      * Creates new form PanelKehadiran
      */
     public PanelKehadiran() {
         initComponents();
+        dao = new KehadiranSQLite();
+        daoPegawai = new PegawaiSQLite();
+        refresh();
+    }
+    
+    private void clear() {
+        txtIDKehadiran.setText("");
+        txtIDPegawai.setText("");
+        txtTanggal.setText("");
+        txtJamMasuk.setText("");
+        txtMenitMasuk.setText("");
+        txtJamKeluar.setText("");
+        txtMenitKeluar.setText("");
+        btnHapus.setEnabled(false);
     }
 
+    public void refresh() {
+    dataPegawai = daoPegawai.selectAll();
+    tblPegawai.setModel(new TabelPegawai(dataPegawai));
+    dataKehadiran = dao.selectAll();
+    tblKehadiran.setModel(new TabelKehadiran(dataKehadiran));
+    txtIDKehadiran.setEnabled(true);
+    clear();
+    }
+
+    private Pegawai getPegawaiByID(String id) {
+        for (Pegawai pegawai : dataPegawai) {
+            if (pegawai.idpegawai.equals(id)) {
+                return pegawai;
+            }
+        }
+        return null;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,8 +94,6 @@ public class PanelKehadiran extends javax.swing.JPanel {
         tblKehadiran = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
         txtIDPegawai = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        btnHitung = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
@@ -84,6 +125,11 @@ public class PanelKehadiran extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblPegawai.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPegawaiMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblPegawai);
 
         jLabel2.setText("ID Kehadiran");
@@ -164,6 +210,11 @@ public class PanelKehadiran extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblKehadiran.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblKehadiranMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblKehadiran);
 
         jLabel9.setText("ID Pegawai");
@@ -171,15 +222,6 @@ public class PanelKehadiran extends javax.swing.JPanel {
         txtIDPegawai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIDPegawaiActionPerformed(evt);
-            }
-        });
-
-        jLabel10.setText("Durasi");
-
-        btnHitung.setText("Hitung");
-        btnHitung.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHitungActionPerformed(evt);
             }
         });
 
@@ -205,11 +247,7 @@ public class PanelKehadiran extends javax.swing.JPanel {
                     .addComponent(jLabel6)
                     .addComponent(txtJamMasuk)
                     .addComponent(txtJamKeluar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnHitung, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(84, 84, 84)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(txtMenitMasuk)
@@ -218,9 +256,9 @@ public class PanelKehadiran extends javax.swing.JPanel {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(btnSimpan)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 327, Short.MAX_VALUE)
                 .addComponent(btnRefresh1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 328, Short.MAX_VALUE)
                 .addComponent(btnHapus1))
         );
         layout.setVerticalGroup(
@@ -245,17 +283,11 @@ public class PanelKehadiran extends javax.swing.JPanel {
                     .addComponent(jLabel4)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtMenitMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel7))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnHitung)))
+                        .addComponent(txtMenitMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtMenitKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -277,23 +309,46 @@ public class PanelKehadiran extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSimpanActionPerformed
-
+        txtIDKehadiran.setEnabled(true);
+        String idpegawai = txtIDPegawai.getText();
+        String idkehadiran = txtIDKehadiran.getText();
+        Pegawai pegawaiID = getPegawaiByID(idpegawai);
+        String tanggal = txtTanggal.getText();
+        int jammasuk = Integer.parseInt(txtJamMasuk.getText());
+        int menitmasuk = Integer.parseInt(txtMenitMasuk.getText());
+        int jamkeluar = Integer.parseInt(txtJamKeluar.getText());
+        int menitkeluar = Integer.parseInt(txtMenitKeluar.getText());
+        
+        Kehadiran newkehadiran = new Kehadiran(idkehadiran, tanggal, jammasuk, menitmasuk, jamkeluar, menitkeluar);
+        newkehadiran.idpegawai= pegawaiID;
+        if (editMode == false) {
+            dao.insert(newkehadiran);
+        } else {
+            dao.update(newkehadiran);
+        }
+        refresh();
+        clear();//    }//GEN-LAST:event_btnSimpanActionPerformed
+    }
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        // TODO add your handling code here:
+       refresh();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnRefresh1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefresh1ActionPerformed
-        // TODO add your handling code here:
+        refresh();
     }//GEN-LAST:event_btnRefresh1ActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-        // TODO add your handling code here:
+        txtIDKehadiran.setEnabled(true);
+
+        dao.delete(txtIDKehadiran.getText());
+        refresh();
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void btnHapus1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapus1ActionPerformed
-        // TODO add your handling code here:
+        txtIDKehadiran.setEnabled(true);
+
+        dao.delete(txtIDKehadiran.getText());
+        refresh();
     }//GEN-LAST:event_btnHapus1ActionPerformed
 
     private void txtIDKehadiranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDKehadiranActionPerformed
@@ -301,7 +356,10 @@ public class PanelKehadiran extends javax.swing.JPanel {
     }//GEN-LAST:event_txtIDKehadiranActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        // TODO add your handling code here:
+        txtIDKehadiran.setEnabled(true);
+
+        dao.reset();
+        refresh();
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void txtJamMasukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtJamMasukActionPerformed
@@ -320,21 +378,40 @@ public class PanelKehadiran extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIDPegawaiActionPerformed
 
-    private void btnHitungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHitungActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnHitungActionPerformed
+    private void tblPegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPegawaiMouseClicked
+            txtIDKehadiran.setEnabled(true);
+
+            Pegawai pegawai = dataPegawai.get(tblPegawai.getSelectedRow());
+
+            txtIDPegawai.setText(pegawai.idpegawai);
+            txtIDPegawai.setEnabled(false);
+
+    }//GEN-LAST:event_tblPegawaiMouseClicked
+
+    private void tblKehadiranMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblKehadiranMouseClicked
+            editMode = true;
+            btnHapus.setEnabled(true);
+
+            Kehadiran kehadiran = dataKehadiran.get(tblKehadiran.getSelectedRow());
+
+            txtIDPegawai.setText(kehadiran.idpegawai.idpegawai);
+            txtIDKehadiran.setText(kehadiran.idkehadiran);
+            txtTanggal.setText(kehadiran.tanggal);
+
+            txtIDKehadiran.setEnabled(false);
+            txtIDPegawai.setEnabled(false);
+            txtTanggal.setEnabled(false);
+    }//GEN-LAST:event_tblKehadiranMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnHapus1;
-    private javax.swing.JButton btnHitung;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnRefresh1;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

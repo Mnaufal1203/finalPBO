@@ -5,7 +5,6 @@
 package helpers;
 import entities.Absensi;
 import java.util.List;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 /**
  *
@@ -13,7 +12,7 @@ import javax.swing.table.AbstractTableModel;
  */
     public class TabelAbsensi extends AbstractTableModel{
     List<Absensi> dataAbsensi;
-    String header[] = {"ID Absensi", "Tagggal", "ID Pegawai", "Alasan"};
+    String header[] = {"ID Absensi", "Tanggal", "ID Pegawai", "Alasan"};
 
     public TabelAbsensi(List<Absensi> dataAbsensi) {
         this.dataAbsensi = dataAbsensi;

@@ -47,7 +47,6 @@ public class PanelAbsensi extends javax.swing.JPanel {
     tblPegawai.setModel(new TabelPegawai(dataPegawai));
     dataAbsensi = dao.selectAll();
     tblAbsensi.setModel(new TabelAbsensi(dataAbsensi));
-    
     txtIDAbsensi.setEnabled(true);
     clear();
     }

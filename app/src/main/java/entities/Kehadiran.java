@@ -17,6 +17,31 @@ public class Kehadiran {
     public int       jamkeluar; 
     public int       menitkeluar; 
     public int       durasi;
+    
+    public int hitungDurasiDalamMenit() {
+        if (this.jammasuk > 24 || this.jammasuk < 0 || this.menitmasuk > 59 || this.menitmasuk < 0 ||
+            this.jamkeluar > 24 || this.jamkeluar < 0 || this.menitkeluar > 59 || this.menitkeluar < 0) {
+            throw new IllegalArgumentException("Invalid time input.");
+        }
+
+        int jamMasukDalamMenit = this.jammasuk * 60 + this.menitmasuk;
+        int jamKeluarDalamMenit = this.jamkeluar * 60 + this.menitkeluar;
+
+        int durasiDalamMenit = jamKeluarDalamMenit - jamMasukDalamMenit;
+        if (durasiDalamMenit < 0) {
+            throw new IllegalArgumentException("End time is before start time.");
+        }
+
+        return durasiDalamMenit;
+    }
+    
+    public String hitungDurasi() {
+        int durasiDalamMenit = hitungDurasiDalamMenit();
+        int durasiJam = durasiDalamMenit / 60;
+        int durasiMenit = durasiDalamMenit % 60;
+
+        return durasiJam + " jam, " + durasiMenit + " menit";
+    }
 
     public Kehadiran(String idkehadiran, String tanggal, int jammasuk, int menitmasuk, int jamkeluar, int menitkeluar, int durasi) {
         this.idkehadiran = idkehadiran;
@@ -25,9 +50,22 @@ public class Kehadiran {
         this.menitmasuk = menitmasuk;
         this.jamkeluar = jamkeluar;
         this.menitkeluar = menitkeluar;
-        this.durasi = durasi;
+        this.durasi = hitungDurasiDalamMenit();
     }
 
+    public Kehadiran(String idkehadiran, String tanggal, int jammasuk, int menitmasuk, int jamkeluar, int menitkeluar) {
+        this.idkehadiran = idkehadiran;
+        this.tanggal = tanggal;
+        this.idpegawai = idpegawai;
+        this.jammasuk = jammasuk;
+        this.menitmasuk = menitmasuk;
+        this.jamkeluar = jamkeluar;
+        this.menitkeluar = menitkeluar;
+    }
+
+    
+
+    
 @Override
     public String toString() {
         return idpegawai.toString();

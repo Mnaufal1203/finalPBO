@@ -38,7 +38,7 @@ public class SetupDB {
             menitmasuk INTEGER DEFAULT 0,
             jamkeluar INTEGER DEFAULT 0,
             menitkeluar INTEGER DEFAULT 0,
-            durasi INTEGER DEFAULT 0,
+            durasi TEXT,
             FOREIGN KEY (idpegawai) REFERENCES pegawai(idpegawai)
             );""",};
 
